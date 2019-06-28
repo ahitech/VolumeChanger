@@ -32,7 +32,8 @@ extern "C" _EXPORT BInputServerFilter* instantiate_input_filter();
 
 
 
-class VolumeChanger : public BInputServerFilter
+class VolumeChanger :
+ public BInputServerFilter
 {
 	public:
 		VolumeChanger();

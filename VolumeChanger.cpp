@@ -4,6 +4,7 @@
 #include <MediaRoster.h>
 #include <String.h>
 
+#include <math.h>
 #include <string.h>
 
 
@@ -89,22 +90,21 @@ status_t VolumeChanger::SetVolumeLevel (int volumeIn, float* volumeOut)
 			fprintf (out, "SetVolumeLevel: Read volume %f\n", volume);
 			fclose (out);
 		}
-		*volumeOut = volume;
+		*volumeOut = round(volume);
 	}
 	else					// Set new volume
 	{
-		if (volumeIn > gain->MaxValue())
-			volumeIn = gain->MaxValue();
-		else if (volumeIn < gain->MinValue())
-			volumeIn = gain->MinValue();
-
-		if (out) {
-			fprintf (out, "SetVolumeLevel: Setting volume to %d\n", volume);
-			fclose (out);
+		if (volumeIn > (int)gain->MaxValue())
+		{
+			volumeIn = (int)gain->MaxValue();
+		}
+		else if (volumeIn < (int)gain->MinValue())
+		{
+			volumeIn = (int)gain->MinValue();
 		}
 
-
-		gain->SetValue(&volumeIn, sizeof(volumeIn), system_time());
+		volume = volumeIn;
+		gain->SetValue(&volume, sizeof(volume), system_time());
 		*volumeOut = volumeIn;
 	}
 	return B_OK;
@@ -123,7 +123,7 @@ status_t VolumeChanger::GetVolumeLevel (int* saveTo)
 	}
 	
 	// Rounding to nearest integer
-	*saveTo = ((int )(previousVolume + 0.5));
+	*saveTo = ((int )previousVolume);
 	return B_OK;
 }
 
@@ -193,15 +193,9 @@ filter_result VolumeChanger::Filter(BMessage* in,
 		if (change != 0)
 		{
 			if (GetVolumeLevel (&volume) != B_OK)
-			return B_DISPATCH_MESSAGE;
-			
-			out = fopen ("/boot/home/textlog.txt", "a+");
-			if (out) {
-				fprintf (out, "Read volume %d\n", volume);
-				fprintf (out, "Setting volume to %d\n", volume + change);
-				fclose (out);
+			{
+				return B_DISPATCH_MESSAGE;
 			}
-			
 			
 			SetVolumeLevel (volume + change, &dummy);
 			return B_SKIP_MESSAGE;
