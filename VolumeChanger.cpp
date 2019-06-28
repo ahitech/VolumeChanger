@@ -8,10 +8,6 @@
 #include <string.h>
 
 
-/* DEBUGGING */
-FILE *out;
-
-
 VolumeChanger::VolumeChanger() 
 {	
 	previousVolumeLevel = MUTED;	// We start with non-muted sound
@@ -85,11 +81,6 @@ status_t VolumeChanger::SetVolumeLevel (int volumeIn, float* volumeOut)
 		bigtime_t when;
 		size_t size = sizeof(volume);
 		gain->GetValue(&volume, &size, &when);
-		out = fopen ("/boot/home/textlog.txt", "a+");
-		if (out) {
-			fprintf (out, "SetVolumeLevel: Read volume %f\n", volume);
-			fclose (out);
-		}
 		*volumeOut = round(volume);
 	}
 	else					// Set new volume
@@ -161,7 +152,6 @@ filter_result VolumeChanger::Filter(BMessage* in,
 	int change = 0;
 	float dummy;
 	bool changeVolume = false;
-	FILE *out;
 
 	if (in->what == B_UNMAPPED_KEY_DOWN)
 	{
