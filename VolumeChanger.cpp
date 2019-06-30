@@ -188,7 +188,7 @@ filter_result VolumeChanger::Filter(BMessage* in,
 			}
 			
 			SetVolumeLevel (volume + change, &dummy);
-			return B_SKIP_MESSAGE;
+//			return B_SKIP_MESSAGE;
 		}
 	}
 	
