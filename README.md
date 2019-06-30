@@ -6,9 +6,9 @@ An input-server filter add-on that provides support for Multimedia buttons on th
 2. Make the binary according to its instructions.
 3. Run the "ScanCode printer" binary.
 4. With the "ScanCode printer" window active, press the multimedia keys on your keyboard.
-      - If there is any output, chances are that this input_server will work out of the box or after small modifications.
-      - If there is no output on multimedia keys, but other keys work good, it means that on your keyboard the multimedia keys send ACPI events, not scancodes. This input_server filter does not support them. Bad luck.
-      - If there is no output even on ordinary keys, (letters and numbers), you're doing something wrong. Return to step 1.
+   - If there is any output, chances are that this input_server will work out of the box or after small modifications.
+   - If there is no output on multimedia keys, but other keys work good, it means that on your keyboard the multimedia keys send ACPI events, not scancodes. This input_server filter does not support them. Bad luck.
+   - If there is no output even on ordinary keys, (letters and numbers), you're doing something wrong. Return to step 1.
 
 ### Tested and supported keyboards:
    - Microsoft Natural Ergonomic Keyboard 4000
