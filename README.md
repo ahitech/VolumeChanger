@@ -14,7 +14,7 @@ An input-server filter add-on that provides support for Multimedia buttons on th
    - Microsoft Natural Ergonomic Keyboard 4000
      ![Image of Microsoft Natural Ergonomic Keyboard 4000](https://github.com/ahitech/VolumeChanger/images/Microsoft Natural 4000.jpg)
    - Microsoft Sculpt Ergonomic Desktop Keyboard
-     ![Image of Microsoft Sculpt Ergonomic Keyboard]('images/MicrosoftSculpt.png')
+     ![Image of Microsoft Sculpt Ergonomic Keyboard](images/MicrosoftSculpt.png)
    - Sharkoon PureWriter mechanical keyboard
      ![Image of Sharkoon PureWriter Mechanical Keyboard](https://github.com/ahitech/VolumeChanger/images/Sharkoon PureWriter.jpg)
    - iPazzPort I8 Wireless keyboard and compatibles
