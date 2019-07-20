@@ -11,6 +11,8 @@
 
 VolumeChanger::VolumeChanger() 
 {	
+	MixerControl* mixerControl = new MixerControl(VOLUME_USE_MIXER);
+	mixerControl->Connect(VOLUME_USE_MIXER);
 	this->settings = new BMessage (SETTINGS_MESSAGE_CONSTANT);
 	GetSettings();
 }
@@ -18,6 +20,10 @@ VolumeChanger::VolumeChanger()
 
 VolumeChanger::~VolumeChanger()
 {
+	if (mixerControl)
+	{
+		delete mixerControl;
+	}
 	SaveSettings();
 }
 
@@ -108,10 +114,7 @@ status_t	VolumeChanger::CheckSettings (void)
 	{
 		settings->AddInt32(VOLUME_MUTE_KEY_NAME, VOLUME_MUTE_KEY);
 	}
-	if (B_OK != settings->GetInfo(PREVIOUS_VOLUME_LEVEL_NAME, &type, &countFound))
-	{
-		settings->AddInt32(PREVIOUS_VOLUME_LEVEL_NAME, MUTED);
-	}
+
 	return B_OK;	
 }
 		
@@ -124,121 +127,59 @@ status_t	VolumeChanger::CheckSettings (void)
  *	B_ERROR in case of error
  *	B_OK if everything was good
  */
-status_t VolumeChanger::SetVolumeLevel (int volumeIn, float* volumeOut)
+status_t VolumeChanger::SetVolumeLevel (int volumeIn)
 {
-	// Code of this function is based on "setvolume" utility
-	// by Axel Dörfler, axeld@pinc-software.de
-	
-	status_t status;
-	media_node mixer;
-	BMediaRoster *roster;
-	BParameter *parameter;
-	BContinuousParameter *gain = NULL;
-	BParameterWeb *web;
-	
-	roster = BMediaRoster::Roster();
-	if (NULL == roster)
-		return B_ERROR;
-
-	status = roster->GetAudioMixer(&mixer);
-	if (B_OK != status)
-		return B_ERROR;
-
-	status = roster->GetParameterWebFor(mixer, &web);
-	roster->ReleaseNode(mixer);
-	if (status != B_OK)
-	{
-		web = NULL;
-		return B_ERROR;
-	}
-	
-	for (int32 index = 0; 
-		 (parameter = web->ParameterAt(index)) != NULL; 
-		 index++) 
-	{
-		if (!strcmp(parameter->Kind(), B_MASTER_GAIN)) {
-			gain = dynamic_cast<BContinuousParameter *>(parameter);
-			break;
-		}
-	}
-
-	if (gain == NULL) {
-		delete web;
-		return B_ERROR;
-	}
-
-	float volume = 0.0;
-	
-	if (ERROR == volumeIn)		// Get current volume
-	{
-		bigtime_t when;
-		size_t size = sizeof(volume);
-		gain->GetValue(&volume, &size, &when);
-		*volumeOut = round(volume);
-	}
-	else					// Set new volume
-	{
-		if (volumeIn > (int)gain->MaxValue())
-		{
-			volumeIn = (int)gain->MaxValue();
-		}
-		else if (volumeIn < (int)gain->MinValue())
-		{
-			volumeIn = (int)gain->MinValue();
-		}
-
-		volume = volumeIn;
-		gain->SetValue(&volume, sizeof(volume), system_time());
-		*volumeOut = volumeIn;
-	}
+	mixerControl->SetVolume(volumeIn);
 	return B_OK;
 }
 
 
 status_t VolumeChanger::GetVolumeLevel (int* saveTo)
 {
-	float previousVolume;
-	status_t status;
-	
-	status = SetVolumeLevel (ERROR, &previousVolume);
-	if (B_OK != status)
-	{
-		return status;
-	}
-	
-	// Rounding to nearest integer
-	*saveTo = ((int )previousVolume);
+	*saveTo = (int )(mixerControl->Volume());
 	return B_OK;
 }
 
 
-int32 VolumeChanger::Mute(void)
+void VolumeChanger::ChangeVolumeBy (int change)
 {
-	int32 currentVolumeLevel;
-	status_t status = GetVolumeLevel(&currentVolumeLevel);
-	float dummy;
-	if (status == B_OK)
-	{
-		status = SetVolumeLevel (MUTED, &dummy);
+	int i = 1000;
+	while (!mixerControl && (i-- > 0)) {
+		this->mixerControl = new MixerControl (VOLUME_USE_MIXER);
+		if (this->mixerControl)
+			this->mixerControl->Connect(VOLUME_USE_MIXER);
 	}
-	if (status == B_OK)
+	if (mixerControl)
 	{
-		settings->ReplaceInt32(PREVIOUS_VOLUME_LEVEL_NAME, currentVolumeLevel);
-		status = SaveSettings();		// Write changes to disk
+		mixerControl->ChangeVolumeBy (change);
+	} else {
+		FILE* out = fopen ("/boot/home/log.txt", "wa");
+		fprintf (out, "CHANGE VOLUME - Could not allocate the mixer Control!\n");
+		fclose (out);
 	}
-	return currentVolumeLevel;
 }
 
 
-status_t VolumeChanger::UnMute (void)
+
+void VolumeChanger::Mute(void)
 {
-	int32 previousVolumeLevel;
-	float dummy;
-	settings->FindInt32(PREVIOUS_VOLUME_LEVEL_NAME, &previousVolumeLevel);
-	SetVolumeLevel (previousVolumeLevel, &dummy);
-	settings->ReplaceInt32(PREVIOUS_VOLUME_LEVEL_NAME, MUTED);
-	return SaveSettings();		// Write changes to disk
+	int i = 1000;
+	while (!mixerControl && (i-- > 0)) {
+		this->mixerControl = new MixerControl (VOLUME_USE_MIXER);
+		if (this->mixerControl)
+			this->mixerControl->Connect(VOLUME_USE_MIXER);
+	}
+	if (mixerControl) {
+		bool muted = this->mixerControl->Mute();
+		mixerControl->SetMute(!muted);
+	} else {
+		FILE* out = fopen ("/boot/home/log.txt", "wa");
+		fprintf (out, "MUTE OR UNMUTE - Could not allocate the mixer Control!\n");
+		fclose (out);
+	}
+	SaveSettings();
 }
+
 
 
 filter_result VolumeChanger::Filter(BMessage* in,
@@ -258,7 +199,6 @@ filter_result VolumeChanger::Filter(BMessage* in,
 	settings->FindInt32(VOLUME_UP_KEY_NAME, &volumeUpKey);
 	settings->FindInt32(VOLUME_DOWN_KEY_NAME, &volumeDownKey);
 	settings->FindInt32(VOLUME_MUTE_KEY_NAME, &volumeMuteKey);
-	settings->FindInt32(PREVIOUS_VOLUME_LEVEL_NAME, &previousVolume);
 
 	if (in->what == B_UNMAPPED_KEY_DOWN)
 	{
@@ -267,29 +207,15 @@ filter_result VolumeChanger::Filter(BMessage* in,
 		
 		if (key == volumeUpKey)
 		{
-			change = +1;
+			ChangeVolumeBy(+1);
 		}
 		else if (key == volumeDownKey)
 		{
-			change = -1;
+			ChangeVolumeBy(-1);
 		}
 		else if (key == volumeMuteKey)
 		{
-			if (previousVolume == MUTED) {
-				previousVolume = Mute();
-			} else {
-				UnMute();
-				previousVolume = MUTED;
-			}
-		}
-		if (change != 0)
-		{
-			if (GetVolumeLevel (&volume) != B_OK)
-			{
-				return B_DISPATCH_MESSAGE;
-			}
-			
-			SetVolumeLevel (volume + change, &dummy);
+			Mute();
 		}
 	}
 	

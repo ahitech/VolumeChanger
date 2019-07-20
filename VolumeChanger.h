@@ -1,6 +1,8 @@
 #ifndef VOLUMECHANGER_H
 #define VOLUMECHANGER_H
 
+#include "MixerControl.h"
+
 #include <Errors.h>
 #include <InputServerFilter.h>
 #include <Message.h>
@@ -36,11 +38,12 @@ extern "C" _EXPORT BInputServerFilter* instantiate_input_filter();
 							"/boot/home/config/settings/VolumeChanger.txt"
 
 
-#define		VOLUME_UP_KEY_NAME			"Volume Up Key"
-#define		VOLUME_DOWN_KEY_NAME		"Volume Down Key"
-#define		VOLUME_MUTE_KEY_NAME		"Volume Mute Key"
-#define		PREVIOUS_VOLUME_LEVEL_NAME	"Previous Volume Level"
+#define		VOLUME_UP_KEY_NAME		"Volume Up Key"
+#define		VOLUME_DOWN_KEY_NAME	"Volume Down Key"
+#define		VOLUME_MUTE_KEY_NAME	"Volume Mute Key"
 
+
+class MixerControl;
 
 
 class VolumeChanger :
@@ -61,10 +64,12 @@ class VolumeChanger :
 		status_t CheckSettings(void);
 		
 		FILE* logFile;
-		int32 Mute(void);
-		status_t UnMute (void);
-		status_t SetVolumeLevel(int In, float* Out);
+		void Mute(void);
+		status_t SetVolumeLevel(int In);
 		status_t GetVolumeLevel(int *);
+		void ChangeVolumeBy(int in);
+		
+		MixerControl* mixerControl;
 };
 
 #endif

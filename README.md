@@ -42,7 +42,7 @@ This list is supposed to expand with the future releases.
     
 ### Changes list:
    - 2019-Jun-28 Initial release, "Volume Up" and "Volume Down" are working.
-   - 2019-Jul-20 Adding limited support for "Mute".   
+   - 2019-Jul-20 Adding full support for "Mute".   
 
 ### ToDo list:
    - [x] Add support for the "Mute" key (highest priority).
