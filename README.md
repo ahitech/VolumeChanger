@@ -12,13 +12,13 @@ An input-server filter add-on that provides support for Multimedia buttons on th
 
 ### Tested and supported keyboards:
    - Microsoft Natural Ergonomic Keyboard 4000
-     ![Image of Microsoft Natural Ergonomic Keyboard 4000](https://github.com/ahitech/VolumeChanger/images/Microsoft Natural 4000.jpg)
+     ![Image of Microsoft Natural Ergonomic Keyboard 4000](images/MicrosoftNatural4000.jpg)
    - Microsoft Sculpt Ergonomic Desktop Keyboard
      ![Image of Microsoft Sculpt Ergonomic Keyboard](images/MicrosoftSculpt.png)
    - Sharkoon PureWriter mechanical keyboard
-     ![Image of Sharkoon PureWriter Mechanical Keyboard](https://github.com/ahitech/VolumeChanger/images/Sharkoon PureWriter.jpg)
+     ![Image of Sharkoon PureWriter Mechanical Keyboard](images/SharkoonPureWriter.jpg)
    - iPazzPort I8 Wireless keyboard and compatibles
-     ![Image of iPazzPort Wireless Keyboard](https://github.com/ahitech/VolumeChanger/images/iPazzPort KP.jpg)
+     ![Image of iPazzPort Wireless Keyboard](images/iPazzPortKP.jpg)
 
 This list will be updated as soon as more keyboards are tested and verified.
 
