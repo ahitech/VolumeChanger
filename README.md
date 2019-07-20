@@ -14,7 +14,7 @@ An input-server filter add-on that provides support for Multimedia buttons on th
    - Microsoft Natural Ergonomic Keyboard 4000
      ![Image of Microsoft Natural Ergonomic Keyboard 4000](https://github.com/ahitech/VolumeChanger/images/Microsoft Natural 4000.jpg)
    - Microsoft Sculpt Ergonomic Desktop Keyboard
-     ![Image of Microsoft Sculpt Ergonomic Keyboard]('https://github.com/ahitech/VolumeChanger/images/Microsoft Sculpt.png')
+     ![Image of Microsoft Sculpt Ergonomic Keyboard]('images/MicrosoftSculpt.png')
    - Sharkoon PureWriter mechanical keyboard
      ![Image of Sharkoon PureWriter Mechanical Keyboard](https://github.com/ahitech/VolumeChanger/images/Sharkoon PureWriter.jpg)
    - iPazzPort I8 Wireless keyboard and compatibles
@@ -45,7 +45,7 @@ This list is supposed to expand with the future releases.
    - 2019-Jul-20 Adding limited support for "Mute".   
 
 ### ToDo list:
-   - Add support for the "Mute" key (highest priority).
-   - Create a package and distribute the add-on through HaikuDepot.
-   - Add support for other multimedia keys.
-   - Create a preferences applet for modifying scancodes and assigning actions to the keys which are not supported by the Shortcuts program.
+   - [x] Add support for the "Mute" key (highest priority).
+   - [ ] Create a package and distribute the add-on through HaikuDepot.
+   - [ ] Add support for other multimedia keys.
+   - [ ] Create a preferences applet for modifying scancodes and assigning actions to the keys which are not supported by the Shortcuts program.
