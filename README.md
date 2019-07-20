@@ -12,14 +12,20 @@ An input-server filter add-on that provides support for Multimedia buttons on th
 
 ### Tested and supported keyboards:
    - Microsoft Natural Ergonomic Keyboard 4000
+     ![Image of Microsoft Natural Ergonomic Keyboard 4000](https://github.com/ahitech/VolumeChanger/images/Microsoft Natural 4000.jpg)
    - Microsoft Sculpt Ergonomic Desktop Keyboard
+     ![Image of Microsoft Sculpt Ergonomic Keyboard](https://github.com/ahitech/VolumeChanger/images/Microsoft Sculpt.png)
    - Sharkoon PureWriter mechanical keyboard
+     ![Image of Sharkoon PureWriter Mechanical Keyboard](https://github.com/ahitech/VolumeChanger/images/Sharkoon PureWriter.jpg)
+   - iPazzPort I8 Wireless keyboard and compatibles
+     ![Image of iPazzPort Wireless Keyboard](https://github.com/ahitech/VolumeChanger/images/iPazzPort KP.jpg)
 
 This list will be updated as soon as more keyboards are tested and verified.
 
 ### Currently supported buttons: 
    - Volume Up               (Scancode 0xC00E9)
    - Volume Down             (Scancode 0xC00EA)
+   - Mute                    (Scancode 0xC00E2)
     
 This list is supposed to expand with the future releases.
 
@@ -34,6 +40,10 @@ This list is supposed to expand with the future releases.
 4. As Haiku boots, remove the binary from ~/config/non-packaged/add-ons/input_server/filters.
 5. Reboot.
     
+### Changes list:
+   - 2019-Jun-28 Initial release, "Volume Up" and "Volume Down" are working.
+   - 2019-Jul-20 Adding limited support for "Mute".   
+
 ### ToDo list:
    - Add support for the "Mute" key (highest priority).
    - Create a package and distribute the add-on through HaikuDepot.
