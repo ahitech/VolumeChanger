@@ -3,6 +3,7 @@
 #include <Alert.h>
 #include <File.h>
 #include <MediaRoster.h>
+#include <Messenger.h>
 #include <String.h>
 
 #include <math.h>
@@ -114,6 +115,23 @@ status_t	VolumeChanger::CheckSettings (void)
 	{
 		settings->AddInt32(VOLUME_MUTE_KEY_NAME, VOLUME_MUTE_KEY);
 	}
+	if (B_OK != settings->GetInfo(SEARCH_KEY_NAME, &type, &countFound))
+	{
+		settings->AddInt32(SEARCH_KEY_NAME, SEARCH_KEY);
+	}
+	if (B_OK != settings->GetInfo(WINDOWS_KEY_NAME, &type, &countFound))
+	{
+		settings->AddInt32(WINDOWS_KEY_NAME, WINDOWS_KEY);
+	}
+	if (B_OK != settings->GetInfo(CTRL_KEY_NAME, &type, &countFound))
+	{
+		settings->AddInt32(CTRL_KEY_NAME, CTRL_KEY);
+	}
+	if (B_OK != settings->GetInfo(ALT_KEY_NAME, &type, &countFound))
+	{
+		settings->AddInt32(ALT_KEY_NAME, SEARCH_KEY);
+	}
+	
 
 	return B_OK;	
 }
@@ -182,6 +200,31 @@ void VolumeChanger::Mute(void)
 
 
 
+void VolumeChanger::OpenSearch(void)
+{
+	/* This function opens the same window as Deskbar -> Find... menu option.
+	 * Which means sending a predefined BMessage to the Deskbar.
+	 * I assume the Deskbar is running and don't do anything if it's not.
+	 */
+	BMessenger* deskbar = new BMessenger ("application/x-vnd.Be-TSKB", -1);
+	
+	if (deskbar) {
+		FILE* out = fopen ("/boot/home/log.txt", "wa");
+		fprintf (out, "OPEN SEARCH - Trying to send message to the Deskbar!\n");
+		fclose (out);
+		deskbar->SendMessage (kFindButton);
+		delete (deskbar);
+	}
+	else
+	{
+		FILE* out = fopen ("/boot/home/log.txt", "wa");
+		fprintf (out, "OPEN SEARCH - Could not locate the Deskbar!\n");
+		fclose (out);
+	}
+}
+
+
+
 filter_result VolumeChanger::Filter(BMessage* in,
 									BList* outlist)
 {
@@ -191,14 +234,23 @@ filter_result VolumeChanger::Filter(BMessage* in,
 	float dummy;
 	bool changeVolume = false;
 	
+	static uint32 currentState = STATE_NEUTRAL;
+	
 	int32 volumeUpKey;
 	int32 volumeDownKey;
 	int32 volumeMuteKey;
-	int32 previousVolume;
+	int32 searchKey;
+	int32 windowsKey;
+	int32 ctrlKey;
+	int32 altKey;
 	
 	settings->FindInt32(VOLUME_UP_KEY_NAME, &volumeUpKey);
 	settings->FindInt32(VOLUME_DOWN_KEY_NAME, &volumeDownKey);
 	settings->FindInt32(VOLUME_MUTE_KEY_NAME, &volumeMuteKey);
+	settings->FindInt32(SEARCH_KEY_NAME, &searchKey);
+	settings->FindInt32(WINDOWS_KEY_NAME, &windowsKey);
+	settings->FindInt32(CTRL_KEY_NAME, &ctrlKey);
+	settings->FindInt32(ALT_KEY_NAME, &altKey);
 
 	if (in->what == B_UNMAPPED_KEY_DOWN)
 	{
@@ -217,8 +269,41 @@ filter_result VolumeChanger::Filter(BMessage* in,
 		{
 			Mute();
 		}
+		else if (key == searchKey)
+		{
+			OpenSearch();
+		}
+//		else if (key == windowsKey)
+//		{
+//			currentState &= STATE_WIN_HELD;
+//		}
 	}
-	
+	else if (in->what == B_UNMAPPED_KEY_UP)
+	{
+		in->FindInt32 ("key", &key);
+		
+//		if (key == windowsKey)
+//		{
+//			currentState ^= STATE_WIN_HELD;		// I assume here that Win was held before
+//		}
+	}
+	else if (in->what == B_KEY_DOWN)
+	{
+//		uint32 modifiers;
+		const char* bytes = NULL;
+		if (in->FindString("bytes", &bytes) != B_OK) ;
+//		in->FindInt32("modifiers", &modifiers);
+		
+		if (key == B_RIGHT_ARROW && (modifiers() & B_OPTION_KEY) != 0)
+		{
+			BAlert* alert = new BAlert ("Shortcut pressed",
+										"You've pressed Win+Up!",
+										"Yep!");
+			alert->Go();
+				
+		}
+		
+	}
 	return B_DISPATCH_MESSAGE;
 }
 	

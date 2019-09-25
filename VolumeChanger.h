@@ -15,32 +15,42 @@
 
 extern "C" _EXPORT BInputServerFilter* instantiate_input_filter();
 
-/* Both MUTED and ERROR are based on MIN_INT (-2147483648),
- * and are therefore well in range for "float"
- */
-#ifndef MIN_INT
-#define		MIN_INT 			(-2147483648)
-#endif
-#define		MUTED	(MIN_INT + 1)
-#ifdef	ERROR
-#undef	ERROR
-#endif
-#define		ERROR	MIN_INT
-	
 
+
+const uint32	kFindButton	=	'Tfnd';
 #define		SETTINGS_MESSAGE_CONSTANT	'sett'
+#define		MESSAGE_TIMEOUT		(1000)	// 1000 microseconds
 
+/*
+ * Key codes
+ */
 #define		VOLUME_UP_KEY		(0xC00E9)
 #define		VOLUME_DOWN_KEY		(0xC00EA)
 #define		VOLUME_MUTE_KEY		(0xC00E2)
+#define		SEARCH_KEY			(0xC0221)
+#define		WINDOWS_KEY			(0x00066)
+#define		CTRL_KEY			(0x0005C)
+#define		ALT_KEY				(0x0005D)
 
 #define		PATH_TO_SETTINGS_FILE	\
 							"/boot/home/config/settings/VolumeChanger.txt"
 
-
+/*
+ * Strings for searching of the key codes
+ */
 #define		VOLUME_UP_KEY_NAME		"Volume Up Key"
 #define		VOLUME_DOWN_KEY_NAME	"Volume Down Key"
 #define		VOLUME_MUTE_KEY_NAME	"Volume Mute Key"
+#define		SEARCH_KEY_NAME			"Search Key"
+#define		WINDOWS_KEY_NAME		"Windows Key"
+#define		CTRL_KEY_NAME			"Control Key"
+#define		ALT_KEY_NAME			"Alt Key"
+
+
+const uint32 STATE_NEUTRAL 		= 0x0000;
+const uint32 STATE_WIN_HELD		= 0x0001;
+const uint32 STATE_CTRL_HELD	= 0x0002;
+const uint32 STATE_ALT_HELD		= 0x0004;
 
 
 class MixerControl;
@@ -68,6 +78,7 @@ class VolumeChanger :
 		status_t SetVolumeLevel(int In);
 		status_t GetVolumeLevel(int *);
 		void ChangeVolumeBy(int in);
+		void OpenSearch(void);
 		
 		MixerControl* mixerControl;
 };
