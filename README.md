@@ -19,6 +19,8 @@ An input-server filter add-on that provides support for Multimedia buttons on th
      ![Image of Sharkoon PureWriter Mechanical Keyboard](images/SharkoonPureWriter.jpg)
    - iPazzPort I8 Wireless keyboard and compatibles
      ![Image of iPazzPort Wireless Keyboard](images/iPazzPortKP.jpg)
+   - Dexp KM-5002BU wireless desktop
+     ![Image of Dexp KM-5002BU](images/DexpKM5002BU.jpg)
 
 This list will be updated as soon as more keyboards are tested and verified.
 
