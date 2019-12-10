@@ -131,7 +131,10 @@ status_t	VolumeChanger::CheckSettings (void)
 	{
 		settings->AddInt32(ALT_KEY_NAME, SEARCH_KEY);
 	}
-	
+	if (B_OK != settings->GetInfo(SEARCH_KEY_2_NAME, &type, &countFound))
+	{
+		settings->AddInt32(SEARCH_KEY_2_NAME, SEARCH_KEY_2);
+	}
 
 	return B_OK;	
 }
@@ -199,28 +202,20 @@ void VolumeChanger::Mute(void)
 }
 
 
-
+/* This function opens the same window as Deskbar -> Find... menu option.
+ * Which means sending a predefined BMessage to the Deskbar.
+ * I assume the Deskbar is running and don't do anything if it's not.
+ */
 void VolumeChanger::OpenSearch(void)
 {
-	/* This function opens the same window as Deskbar -> Find... menu option.
-	 * Which means sending a predefined BMessage to the Deskbar.
-	 * I assume the Deskbar is running and don't do anything if it's not.
-	 */
-	BMessenger* deskbar = new BMessenger ("application/x-vnd.Be-TSKB", -1);
+//	FILE* out =  fopen ("/boot/home/log.txt", "wa");
 	
-	if (deskbar) {
-		FILE* out = fopen ("/boot/home/log.txt", "wa");
-		fprintf (out, "OPEN SEARCH - Trying to send message to the Deskbar!\n");
-		fclose (out);
-		deskbar->SendMessage (kFindButton);
-		delete (deskbar);
-	}
-	else
-	{
-		FILE* out = fopen ("/boot/home/log.txt", "wa");
-		fprintf (out, "OPEN SEARCH - Could not locate the Deskbar!\n");
-		fclose (out);
-	}
+	BMessenger TrackerMessenger = BMessenger("application/x-vnd.Be-TRAK");
+//	fprintf (out, "OPEN SEARCH - Trying to send message to the Tracker!\n");
+	TrackerMessenger.SendMessage (kFindButton);
+	
+//	fprintf (out, "OPEN SEARCH - Before exitting\n");
+//	fclose (out);
 }
 
 
@@ -239,10 +234,10 @@ filter_result VolumeChanger::Filter(BMessage* in,
 	int32 volumeUpKey;
 	int32 volumeDownKey;
 	int32 volumeMuteKey;
-	int32 searchKey;
 	int32 windowsKey;
 	int32 ctrlKey;
 	int32 altKey;
+	int32 searchKey, searchKey2;
 	
 	settings->FindInt32(VOLUME_UP_KEY_NAME, &volumeUpKey);
 	settings->FindInt32(VOLUME_DOWN_KEY_NAME, &volumeDownKey);
@@ -251,6 +246,7 @@ filter_result VolumeChanger::Filter(BMessage* in,
 	settings->FindInt32(WINDOWS_KEY_NAME, &windowsKey);
 	settings->FindInt32(CTRL_KEY_NAME, &ctrlKey);
 	settings->FindInt32(ALT_KEY_NAME, &altKey);
+	settings->FindInt32(SEARCH_KEY_2_NAME, &searchKey2);
 
 	if (in->what == B_UNMAPPED_KEY_DOWN)
 	{
@@ -269,44 +265,49 @@ filter_result VolumeChanger::Filter(BMessage* in,
 		{
 			Mute();
 		}
-		else if (key == searchKey)
+//<<<<<<< Updated upstream
+//		else if (key == searchKey)
+//		{
+//			OpenSearch();
+//		}
+////		else if (key == windowsKey)
+////		{
+////			currentState &= STATE_WIN_HELD;
+////		}
+//	}
+//	else if (in->what == B_UNMAPPED_KEY_UP)
+//	{
+//		in->FindInt32 ("key", &key);
+//		
+////		if (key == windowsKey)
+////		{
+////			currentState ^= STATE_WIN_HELD;		// I assume here that Win was held before
+////		}
+//	}
+//	else if (in->what == B_KEY_DOWN)
+//	{
+////		uint32 modifiers;
+//		const char* bytes = NULL;
+//		if (in->FindString("bytes", &bytes) != B_OK) ;
+////		in->FindInt32("modifiers", &modifiers);
+//		
+//		if (key == B_RIGHT_ARROW && (modifiers() & B_OPTION_KEY) != 0)
+//		{
+//			BAlert* alert = new BAlert ("Shortcut pressed",
+//										"You've pressed Win+Up!",
+//										"Yep!");
+//			alert->Go();
+//				
+//		}
+		else if ((key == searchKey) ||
+		         (key == searchKey2))
 		{
 			OpenSearch();
 		}
-//		else if (key == windowsKey)
-//		{
-//			currentState &= STATE_WIN_HELD;
-//		}
-	}
-	else if (in->what == B_UNMAPPED_KEY_UP)
-	{
-		in->FindInt32 ("key", &key);
-		
-//		if (key == windowsKey)
-//		{
-//			currentState ^= STATE_WIN_HELD;		// I assume here that Win was held before
-//		}
-	}
-	else if (in->what == B_KEY_DOWN)
-	{
-//		uint32 modifiers;
-		const char* bytes = NULL;
-		if (in->FindString("bytes", &bytes) != B_OK) ;
-//		in->FindInt32("modifiers", &modifiers);
-		
-		if (key == B_RIGHT_ARROW && (modifiers() & B_OPTION_KEY) != 0)
-		{
-			BAlert* alert = new BAlert ("Shortcut pressed",
-										"You've pressed Win+Up!",
-										"Yep!");
-			alert->Go();
-				
-		}
-		
 	}
 	return B_DISPATCH_MESSAGE;
 }
-	
+
 
 
 status_t VolumeChanger::InitCheck()

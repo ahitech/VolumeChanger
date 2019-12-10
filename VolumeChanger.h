@@ -31,6 +31,8 @@ const uint32	kFindButton	=	'Tfnd';
 #define		WINDOWS_KEY			(0x00066)
 #define		CTRL_KEY			(0x0005C)
 #define		ALT_KEY				(0x0005D)
+#define		SEARCH_KEY_2		(0x00070070)
+
 
 #define		PATH_TO_SETTINGS_FILE	\
 							"/boot/home/config/settings/VolumeChanger.txt"
@@ -42,6 +44,7 @@ const uint32	kFindButton	=	'Tfnd';
 #define		VOLUME_DOWN_KEY_NAME	"Volume Down Key"
 #define		VOLUME_MUTE_KEY_NAME	"Volume Mute Key"
 #define		SEARCH_KEY_NAME			"Search Key"
+#define		SEARCH_KEY_2_NAME		"Search Key 2"
 #define		WINDOWS_KEY_NAME		"Windows Key"
 #define		CTRL_KEY_NAME			"Control Key"
 #define		ALT_KEY_NAME			"Alt Key"
