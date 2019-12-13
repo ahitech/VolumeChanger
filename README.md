@@ -28,7 +28,8 @@ This list will be updated as soon as more keyboards are tested and verified.
    - Volume Up               (Scancode 0xC00E9)
    - Volume Down             (Scancode 0xC00EA)
    - Mute                    (Scancode 0xC00E2)
-   - Search                  (Scancodes 0xC0221 or 0x70070)
+   - Search                  (Scancode 0xC0221)
+   - Open Web Browser        (Scancode 0xC0223)
     
 This list is supposed to expand with the future releases.
 
@@ -47,9 +48,10 @@ This list is supposed to expand with the future releases.
    - 2019-Jun-28 Initial release, "Volume Up" and "Volume Down" are working.
    - 2019-Jul-20 Adding full support for "Mute".
    - 2019-Dec-10 Added support for "Search" key (2 different scancodes).
+   - 2019-Dec-12 Added support for "Web browser" key. Removed one of the "Search key" scancodes. (It's recommended to remove ~/config/settings/VolumeChanger.txt file before using this update to purge the removed 2nd scancode).
 
 ### ToDo list:
    - [x] Add support for the "Mute" key (highest priority).
    - [ ] Create a package and distribute the add-on through HaikuDepot.
-   - [ ] Add support for other multimedia keys.
+   - [x] Add support for other multimedia keys.
    - [ ] Create a preferences applet for modifying scancodes and assigning actions to the keys which are not supported by the Shortcuts program.

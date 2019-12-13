@@ -4,6 +4,7 @@
 #include <File.h>
 #include <MediaRoster.h>
 #include <Messenger.h>
+#include <Roster.h>
 #include <String.h>
 
 #include <math.h>
@@ -131,9 +132,9 @@ status_t	VolumeChanger::CheckSettings (void)
 	{
 		settings->AddInt32(ALT_KEY_NAME, SEARCH_KEY);
 	}
-	if (B_OK != settings->GetInfo(SEARCH_KEY_2_NAME, &type, &countFound))
+	if (B_OK != settings->GetInfo(WEB_BROWSER_KEY_NAME, &type, &countFound))
 	{
-		settings->AddInt32(SEARCH_KEY_2_NAME, SEARCH_KEY_2);
+		settings->AddInt32(WEB_BROWSER_KEY_NAME, WEB_BROWSER_KEY);
 	}
 
 	return B_OK;	
@@ -220,6 +221,16 @@ void VolumeChanger::OpenSearch(void)
 
 
 
+void VolumeChanger::OpenWebBrowser(void)
+{
+	if (be_roster)
+	{
+		be_roster->Launch("text/html");
+	}
+}
+
+
+
 filter_result VolumeChanger::Filter(BMessage* in,
 									BList* outlist)
 {
@@ -237,7 +248,7 @@ filter_result VolumeChanger::Filter(BMessage* in,
 	int32 windowsKey;
 	int32 ctrlKey;
 	int32 altKey;
-	int32 searchKey, searchKey2;
+	int32 searchKey, webBrowserKey;
 	
 	settings->FindInt32(VOLUME_UP_KEY_NAME, &volumeUpKey);
 	settings->FindInt32(VOLUME_DOWN_KEY_NAME, &volumeDownKey);
@@ -246,7 +257,7 @@ filter_result VolumeChanger::Filter(BMessage* in,
 	settings->FindInt32(WINDOWS_KEY_NAME, &windowsKey);
 	settings->FindInt32(CTRL_KEY_NAME, &ctrlKey);
 	settings->FindInt32(ALT_KEY_NAME, &altKey);
-	settings->FindInt32(SEARCH_KEY_2_NAME, &searchKey2);
+	settings->FindInt32(WEB_BROWSER_KEY_NAME, &webBrowserKey);
 
 	if (in->what == B_UNMAPPED_KEY_DOWN)
 	{
@@ -299,10 +310,13 @@ filter_result VolumeChanger::Filter(BMessage* in,
 //			alert->Go();
 //				
 //		}
-		else if ((key == searchKey) ||
-		         (key == searchKey2))
+		else if (key == searchKey)
 		{
 			OpenSearch();
+		}
+		else if (key == webBrowserKey)
+		{
+			OpenWebBrowser();
 		}
 	}
 	return B_DISPATCH_MESSAGE;
