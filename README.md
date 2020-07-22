@@ -21,6 +21,10 @@ An input-server filter add-on that provides support for Multimedia buttons on th
      ![Image of iPazzPort Wireless Keyboard](images/iPazzPortKP.jpg)
    - Dexp KM-5002BU wireless desktop
      ![Image of Dexp KM-5002BU](images/DexpKM5002BU.jpg)
+   - Lenovo G530 laptop
+     The volume change buttons of this laptop send different scancodes, therefore the constants in the source need to be changed and the source recompiled, but after the recompilation it works perfectly.
+     ![Image of Lenovo G530](images/LenovoG530.jpg)
+     
 
 This list will be updated as soon as more keyboards are tested and verified.
 
