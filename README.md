@@ -24,7 +24,14 @@ An input-server filter add-on that provides support for Multimedia buttons on th
    - Lenovo G530 laptop<br>
      The volume change buttons of this laptop send different scancodes, therefore the constants in the source need to be changed and the source recompiled, but after the recompilation it works perfectly.
      ![Image of Lenovo G530](images/LenovoG530.jpg)
-     
+   - Lenovo ThinkPad TrackPoint keyboard<br>
+     Works out of the box.
+     ![Image of Lenovo ThinkPad TrackPoint keyboard](images/LenovoThinkPadTrackPoint.png)
+   - Microsoft All-In-One Media Keyboard with wireless connection<br>
+     ![Image of Microsoft All-In-One Media Keyboard](images/MicrosoftAllInOneMediaKeyboard.jpg)
+   - HP Pavillion 15 CS-3020NJ laptop<br>
+     The volume change buttons of this laptop send different scancodes, therefore the constants in the source need to be changed and the source recompiled, but after the recompilation it works perfectly.
+     ![Image of my own HP Pavillion 15 CS-3020NJ laptop](images/HPPavillion15CS3020NJ.jpg)
 
 This list will be updated as soon as more keyboards are tested and verified.
 
