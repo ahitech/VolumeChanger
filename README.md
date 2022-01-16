@@ -22,7 +22,7 @@ An input-server filter add-on that provides support for Multimedia buttons on th
    - Dexp KM-5002BU wireless desktop
      ![Image of Dexp KM-5002BU](images/DexpKM5002BU.jpg)
    - Lenovo G530 laptop<br>
-     The volume change buttons of this laptop send different scancodes, therefore the constants in the source need to be changed and the source recompiled, but after the recompilation it works perfectly.
+     The volume change buttons of this laptop send different scancodes, therefore the constants in the source need to be changed and the source recompiled, but after the recompilation it works perfectly.<br>
      ![Image of Lenovo G530](images/LenovoG530.jpg)
    - Lenovo ThinkPad TrackPoint keyboard<br>
      Works out of the box.<br>
@@ -30,7 +30,7 @@ An input-server filter add-on that provides support for Multimedia buttons on th
    - Microsoft All-In-One Media Keyboard with wireless connection<br>
      ![Image of Microsoft All-In-One Media Keyboard](images/MicrosoftAllInOneMediaKeyboard.jpg)
    - HP Pavillion 15 CS-3020NJ laptop<br>
-     The volume change buttons of this laptop send different scancodes, therefore the constants in the source need to be changed and the source recompiled, but after the recompilation it works perfectly.
+     The volume change buttons of this laptop send different scancodes, therefore the constants in the source need to be changed and the source recompiled, but after the recompilation it works perfectly.<br>
      ![Image of my own HP Pavillion 15 CS-3020NJ laptop](images/HPPavillion15CS3020NJ.jpg)
 
 This list will be updated as soon as more keyboards are tested and verified.
