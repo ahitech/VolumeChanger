@@ -25,7 +25,7 @@ An input-server filter add-on that provides support for Multimedia buttons on th
      The volume change buttons of this laptop send different scancodes, therefore the constants in the source need to be changed and the source recompiled, but after the recompilation it works perfectly.
      ![Image of Lenovo G530](images/LenovoG530.jpg)
    - Lenovo ThinkPad TrackPoint keyboard<br>
-     Works out of the box.
+     Works out of the box.<br>
      ![Image of Lenovo ThinkPad TrackPoint keyboard](images/LenovoThinkPadTrackPoint.png)
    - Microsoft All-In-One Media Keyboard with wireless connection<br>
      ![Image of Microsoft All-In-One Media Keyboard](images/MicrosoftAllInOneMediaKeyboard.jpg)
