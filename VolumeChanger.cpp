@@ -10,9 +10,22 @@
 #include <math.h>
 #include <string.h>
 
+#ifdef		DEBUG
+#define		TRACE(text)		{ FILE* logA = fopen("/boot/home/LogA.txt", "at"); if (!logA) { logA = fopen("/boot/home/Log.txt", "wt"); } if (logA) { fprintf(logA, text); fflush(logA); fclose(logA); } }
+#else
+#define		TRACE(text)
+#endif
+
+
+const uint16	NORMAL_OPERATION		= 0;
+const uint16	FIRST_CHARACTER			= 1;
+const uint16	SECOND_CHARACTER		= 2;
+const uint16 	THIRD_CHARACTER			= 3;
+
 
 VolumeChanger::VolumeChanger() 
 {	
+	TRACE("-----===< STARTUP >===-----\n");
 	MixerControl* mixerControl = new MixerControl(VOLUME_USE_MIXER);
 	mixerControl->Connect(VOLUME_USE_MIXER);
 	this->settings = new BMessage (SETTINGS_MESSAGE_CONSTANT);
@@ -209,14 +222,8 @@ void VolumeChanger::Mute(void)
  */
 void VolumeChanger::OpenSearch(void)
 {
-//	FILE* out =  fopen ("/boot/home/log.txt", "wa");
-	
 	BMessenger TrackerMessenger = BMessenger("application/x-vnd.Be-TRAK");
-//	fprintf (out, "OPEN SEARCH - Trying to send message to the Tracker!\n");
 	TrackerMessenger.SendMessage (kFindButton);
-	
-//	fprintf (out, "OPEN SEARCH - Before exitting\n");
-//	fclose (out);
 }
 
 
@@ -240,7 +247,7 @@ filter_result VolumeChanger::Filter(BMessage* in,
 	float dummy;
 	bool changeVolume = false;
 	
-	static uint32 currentState = STATE_NEUTRAL;
+	static uint16 currentState = NORMAL_OPERATION;
 	
 	int32 volumeUpKey;
 	int32 volumeDownKey;
@@ -261,30 +268,54 @@ filter_result VolumeChanger::Filter(BMessage* in,
 
 	if (in->what == B_UNMAPPED_KEY_DOWN)
 	{
-
-		in->FindInt32 ("key", &key);
 		
+		in->FindInt32 ("key", &key);
+		const char* bytes;
+		in->FindString("bytes", &bytes);
 		if (key == volumeUpKey)
 		{
+			currentState = NORMAL_OPERATION;
 			ChangeVolumeBy(+1);
 		}
 		else if (key == volumeDownKey)
 		{
+			currentState = NORMAL_OPERATION;
 			ChangeVolumeBy(-1);
 		}
 		else if (key == volumeMuteKey)
 		{
+			currentState = NORMAL_OPERATION;
 			Mute();
 		}
-//<<<<<<< Updated upstream
-//		else if (key == searchKey)
-//		{
-//			OpenSearch();
-//		}
-////		else if (key == windowsKey)
-////		{
-////			currentState &= STATE_WIN_HELD;
-////		}
+		else if (bytes[0] == CTRL_KEY)
+		{
+			TRACE("First key detected\n");
+			currentState = FIRST_CHARACTER;
+		}
+		else if (bytes[0] == WINDOWS_KEY && currentState == FIRST_CHARACTER)
+		{
+			TRACE("Second key detected\n");
+			currentState = SECOND_CHARACTER;	
+		}
+		else if (currentState == SECOND_CHARACTER)
+		{
+			currentState = NORMAL_OPERATION;
+			int32 totalWorkspaces = count_workspaces();
+			int32 currentWorkspace = current_workspace();
+			TRACE("Switching workspace... ");
+			if (bytes[0] == B_LEFT_ARROW)
+			{
+				// Switch workspace left
+				activate_workspace(currentWorkspace - 1 + totalWorkspaces % totalWorkspaces);
+				TRACE("...left.\n");
+			}
+			else if (bytes[0] == B_RIGHT_ARROW)
+			{
+				// Switch workspace left
+				activate_workspace(currentWorkspace + 1 % totalWorkspaces);
+				TRACE("...right.\n");
+			}
+		}
 //	}
 //	else if (in->what == B_UNMAPPED_KEY_UP)
 //	{

@@ -1,4 +1,4 @@
-#ifndef VOLUMECHANGER_H
+ #ifndef VOLUMECHANGER_H
 #define VOLUMECHANGER_H
 
 #include "MixerControl.h"
